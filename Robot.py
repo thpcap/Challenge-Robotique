@@ -6,7 +6,7 @@ class Robot:
         self.x = 0
         self.y = 0
         self.mass = 0
-        self.orientation = 90
+        self.orientation = math.pi/2
         self.fuel = 10000
         self.b = 0.01
         self.b0 = 0.01
