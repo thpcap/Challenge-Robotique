@@ -34,9 +34,9 @@ def path(robot, cylindres):
         ax.plot((1,0),(0,0),color='magenta')
         path = []
 
-        while robot.fuel > 0:
+        while (robot.fuel > 0 and len(cylindres)):
             #calcule le meilleur cylindre à  atteindre
-            best = Cylindres(-1,0,0,0)
+            best = cylindres[0]
             best_value = 0
             for cylindre in cylindres:
                 value = h(robot, cylindre)
@@ -45,6 +45,7 @@ def path(robot, cylindres):
                     best = cylindre
             path.append(best)
             cylindres.remove(best)
+            ax.plot((robot.x,best.x),(robot.y,best.y),color='black')
 
             #calcule la nouvelle position du robot et le deplassement
             dist = robot.Distance(best)
@@ -53,12 +54,10 @@ def path(robot, cylindres):
             robot.mass += best.Masse
             robot.x = math.cos(math.pi/2 - robot.orientation) * dist
             robot.y = math.sin(math.pi/2 - robot.orientation) * dist
-            ax.plot((robot.x,best.x),(robot.y,best.y),color='black')
 
             #add Commands for the Robot
             Output_Str+="TURN "+str(robot.angle(cylindre))+"\n"
-            Output_Str+="GO "+str(dist)+"\n"
-            
+            Output_Str+="GO "+str(dist)+"\n"            
         Output_Str+="FINISH"
         Output_File.write(Output_Str)
         Output_File.close()
@@ -66,5 +65,6 @@ def path(robot, cylindres):
         plt.show()
      
 cylindres=Input_Map("map.csv")
+
 robot=Robot()   
 path(robot,cylindres)
