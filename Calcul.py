@@ -6,9 +6,9 @@ import matplotlib.pyplot as plt
 import matplotlib.patches as pat
 
 weights={
-    "distance": 1,
+    "distance": -0.5,
     "reward": 1,
-    "mass": 1
+    "mass": -1
 }
 
 def h(robot, cylindre):
@@ -59,7 +59,7 @@ def path(robot, cylindres):
             ax.plot((robot.x,x),(robot.y,y),color='black')
 
             #add Commands for the Robot
-            Output_Str+="TURN "+str(angl*(180/math.pi))+"\n"
+            Output_Str+="TURN "+str(-angl*(180/math.pi))+"\n"
             Output_Str+="GO "+str(dist)+"\n"            
         Output_Str+="FINISH"
         Output_File.write(Output_Str)
@@ -67,7 +67,7 @@ def path(robot, cylindres):
         plt.title('path', fontsize=8)
         plt.show()
      
-cylindres=Input_Map("map.csv")
+cylindres=Input_Map("C:\CHALLENGE\donnees-map.txt")
 
 robot=Robot()   
 path(robot,cylindres)
