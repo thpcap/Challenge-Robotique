@@ -14,10 +14,10 @@ class Robot:
         self.v0 = 1
 
     def vitesse(self):
-        return self.v0 * math.exp(-alpha * self.mass)
+        return self.v0 * math.exp(-self.alpha * self.mass)
     
     def consumption(self):
-        return sefl.b * self.mass + self.b0
+        return self.b * self.mass + self.b0
 
     def angle(self, cylindre):
         return math.atan((self.x-cylindre.x)/(self.y-cylindre.y)) - robot.orientation
