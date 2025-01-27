@@ -2,6 +2,8 @@ from Cylindres import *
 from input import *
 from Robot import *
 import math
+import matplotlib as plt
+from matplotlib.patches import Circle
 
 weights={
     "distance": 1,
@@ -13,14 +15,16 @@ def h(robot, cylindre):
     return robot.distance(cylindre)*weights["distance"] + cylindre.Recompense * weights["reward"] + cylindre.Masse*weights["mass"]
 
 def path(robot, cylindres):
+    #ouvre le fichier d'output
     with open("output.txt",mode="w")as Output_File:
         Output_Str=""
+        robot = Robot()
         for Cyl in cylindres:
             print(Cyl)
-        robot = Robot()
         path = []
 
         while robot.fuel > 0:
+            #calcule le meilleur cylindre à  atteindre
             best = Cylindres()
             best_value = 0
             for cylindre in cylindres:
@@ -30,6 +34,7 @@ def path(robot, cylindres):
                     best = cylindre
             path.append(best)
 
+            #calcule la nouvelle position du robot et le deplassement
             dist = robot.distance(best)
             robot.orientation += robot.angle(cylindre)
             robot.fuel = robot.consumption * dist
