@@ -20,7 +20,10 @@ class Robot:
         return self.b * self.mass + self.b0
 
     def angle(self, cylindre):
-        return math.atan((self.x-cylindre.x)/(self.y-cylindre.y)) - self.orientation
+        if((self.y-cylindre.y)>0):
+            return math.atan((self.x-cylindre.x)/(self.y-cylindre.y)) - self.orientation
+        else:
+            return -math.atan((self.x-cylindre.x)/(self.y-cylindre.y)) - self.orientation 
      
     def Distance(self, cylindre):
         return ((self.x-cylindre.x)**2+(self.y-cylindre.y)**2)**0.5-cylindre.Rayon
