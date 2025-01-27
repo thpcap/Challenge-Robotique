@@ -1,0 +1,18 @@
+{
+    "b0" : 0.001,
+    "b":0.01,
+    "alpha":0.0698,
+    "inital_fuel":10000,
+    "v0":1,
+    "types_Cyl":[
+        {"type":1,"masse":1,"valeur":1,"color":"r"},
+        {"type":2,"masse":2,"valeur":2,"color":"y"},
+        {"type":3,"masse":2,"valeur":3,"color":"b"}
+    ],
+    "Rayon_Cyl":1,
+    "weights":[{
+        "distance": 1,
+        "reward": 1,
+        "mass": 1
+    }]
+}
