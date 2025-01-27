@@ -17,7 +17,3 @@ def Input_Map(Map_CSV_Path):
             map.append(Cylindres(x=float(row[0]),y=float(row[1]),Type=int(float(row[2])),Id=i))           
         csv_file.close()
         return map
-        
-map=Input_Map("Map.csv")
-for Cyl in map:
-    print(Cyl)

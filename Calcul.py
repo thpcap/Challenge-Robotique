@@ -13,6 +13,8 @@ def h(cylindre):
 
 def path(robot, cylindres):
     cylindres = input.Input_Map("map.csv")
+    for Cyl in cylindres:
+        print(Cyl)
     robot = input.Input_Robot("") #TODO
     path = []
 
@@ -28,4 +30,6 @@ def path(robot, cylindres):
 
         robot.fuel = robot.consumption * robot.distance(best)
         robot.mass += best.Masse
-        
+
+
+    
