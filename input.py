@@ -1,22 +1,21 @@
 import csv
 from Cylindres import *
 def Input_Map(Map_CSV_Path):
-    with open(Map_CSV_Path) as csv_file:
-        csv_str=csv_file.read()
-        csv_file.close()
-        csv_str=csv_str.replace("    ",",")
-        csv_str=csv_str.replace("   ",",")
-        print(csv_str)
-        Cylindres_dic= csv.reader(csv_str, delimiter=",")
+    with open(Map_CSV_Path) as csv_file:        
+        Cylindres_dic= csv.reader(csv_file, delimiter=" ")
+        Cylindres_dic2=[]
+        for row in Cylindres_dic:
+            row2=[]
+            for val in row:
+                if(val!=""):
+                    row2.append(val)
+            Cylindres_dic2.append(row2)
         map=[]
         i=0
-        for row in Cylindres_dic:
+        for row in Cylindres_dic2:
             i+=1
-            for val in row:
-                print(val,end=",")
-            print(len(row))
-            #map.append(Cylindres(x=row[0],y=row[1],Type=row[2],Id=i))           
-        
+            map.append(Cylindres(x=float(row[0]),y=float(row[1]),Type=int(float(row[2])),Id=i))           
+        csv_file.close()
         return map
         
 map=Input_Map("Map.csv")
