@@ -45,7 +45,7 @@ def path(robot, cylindres):
             
             #add Commands for the Robot
             Output_Str+="TURN "+str(robot.angle(cylindre))+"\n"
-            Output_Str+="GOb "+str(dist)+"\n"
+            Output_Str+="GO "+str(dist)+"\n"
             
         Output_Str+="FINISH"
         Output_File.write(Output_Str)
