@@ -20,8 +20,8 @@ def path(robot, cylindres):
         Output_Str=""
         robot = Robot()
         fig, ax = plt.subplots()
-        plt.xlim(-5,25)
-        plt.ylim(-5,30)
+        plt.xlim(-5,100)
+        plt.ylim(-5,100)
         plt.grid(linestyle='--')
         ax.set_aspect(1)
         for Cyl in cylindres:
@@ -52,11 +52,11 @@ def path(robot, cylindres):
             robot.orientation += robot.angle(best)
             robot.fuel = robot.consumption() * dist
             robot.mass += best.Masse
-            robot.x = math.cos(math.pi/2 - robot.orientation) * dist
-            robot.y = math.sin(math.pi/2 - robot.orientation) * dist
+            robot.x += math.cos(math.pi/2 - robot.orientation) * dist
+            robot.y += math.sin(math.pi/2 - robot.orientation) * dist
 
             #add Commands for the Robot
-            Output_Str+="TURN "+str(robot.angle(cylindre))+"\n"
+            Output_Str+="TURN "+str(robot.angle(best)*(180/math.pi))+"\n"
             Output_Str+="GO "+str(dist)+"\n"            
         Output_Str+="FINISH"
         Output_File.write(Output_Str)
