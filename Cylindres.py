@@ -1,5 +1,5 @@
 class Cylindres:
-    def __init__(self,Id,x,y,Type,Rayon=1):
+    def __init__(self,Id,x,y,Type,Rayon=0.5):
         self.Id=Id
         self.Rayon=Rayon
         self.x=x
@@ -8,12 +8,15 @@ class Cylindres:
         if(self.Type==1):
             self.Masse=1
             self.Valeur=1
+            self.color='r'
         elif(self.Type==2):
             self.Masse=2
             self.Valeur=2
+            self.color='y'
         elif(self.Type==3):
             self.Masse=2
             self.Valeur=3
+            self.color='b'
         else:
             print("type de Cylindre non reconnu")
             self.Masse=-1
