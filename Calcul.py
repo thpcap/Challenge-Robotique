@@ -13,8 +13,6 @@ def h(robot, cylindre):
     return robot.distance(cylindre)*weights["distance"] + cylindre.Recompense * weights["reward"] + cylindre.Masse*weights["mass"]
 
 def path(robot, cylindres):
-    cylindres = input.Input_Map("map.csv")
-    #robot = input.Input_Robot("")
     robot = Robot()
     path = []
 
