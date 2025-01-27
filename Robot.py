@@ -20,9 +20,7 @@ class Robot:
         return sefl.b * self.mass + self.b0
 
     def angle(self, cylindre):
-        dot = self.x*cylindre.x + self.y*cylindre.y
-        norm_product = (self.x**2 + self.y**2)**0.5 + (cylindre.x**2 + cylindre.y**2)*0.5
-        return math.acos(dot/norm_product)
+        return math.atan((self.x-cylindre.x)/(self.y-cylindre.y)) - robot.orientation
      
     def Distance(self, cylindre):
         return ((self.x-cylindre.x)**2+(self.y-cylindre.y)**2)**0.5-cylindre.Rayon
