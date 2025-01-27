@@ -7,6 +7,6 @@ class Cylindres:
         self.Type=Type
     
     def __str__(self):
-        return "x="+self.x+" y="+self.y+" Type="+self.Type
+        return "id="+str(self.Id)+" x="+str(self.x)+" y="+str(self.y)+" Type="+str(self.Type)
         
         
