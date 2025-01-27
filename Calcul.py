@@ -25,6 +25,7 @@ def path(robot, cylindres):
                 best_value = value
                 best = cylindre
         path.append(best)
+        cylindres.remove(best)
 
         dist = robot.distance(best)
         robot.orientation += robot.angle(cylindre)
