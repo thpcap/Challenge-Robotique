@@ -18,7 +18,6 @@ class Cylindres:
             self.Valeur=3
             self.color='b'
         else:
-            print("type de Cylindre non reconnu")
             self.Masse=-1
             self.Valeur=-1
     
