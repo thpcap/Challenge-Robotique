@@ -18,7 +18,7 @@ def intersectSegmentCircleP(robot, cylindre, cylindre2):
     discriminant = r * r * dr * dr - D * D
 
     if discriminant < 0:
-        return None, None
+        return (None,None),(None,None)
     if discriminant == 0:
         return ((D * dy) / (dr * dr) + cylindre2.x, (-D * dx) / (dr * dr) + cylindre2.y)
     
