@@ -1,11 +1,5 @@
 import random
 
-X_MAX = 30
-Y_MAX = 30
-X_MIN = 0
-Y_MIN = 0
-DISTANCE_THRESHOLD = 1
-
 def distance(ax, ay, bx, by):
     return ((ax-bx)**2 + (ay-by)**2)**0.5
 

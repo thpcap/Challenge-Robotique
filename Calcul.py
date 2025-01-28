@@ -16,6 +16,28 @@ weights={
     "collision":1
 }
 
+weights_names = ["distance", "reward", "mass"]
+
+def getWeights():
+    return weights
+
+def setWeights(_weights):
+    ind = 0
+    for name in weights_name:
+        weights[name] = weights[ind]
+        ind += 1
+
+weights_names = ["distance", "reward", "mass"]
+
+def getWeights():
+    return weights
+
+def setWeights(_weights):
+    ind = 0
+    for name in weights_name:
+        weights[name] = weights[ind]
+        ind += 1
+
 def h(robot, cylindre):
     return robot.Distance(cylindre)*weights["distance"] + cylindre.Valeur * weights["reward"] + cylindre.Masse*weights["mass"]
 
