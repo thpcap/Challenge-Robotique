@@ -1,2 +1,2 @@
-input_link = "C:\CHALLENGE\donnees-map.txt"
+input_link = "map.csv"
 output_link = "output.txt"
