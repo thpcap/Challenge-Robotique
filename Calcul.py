@@ -16,25 +16,12 @@ weights={
     "collision":1
 }
 
-weights_names = ["distance", "reward", "mass"]
-
 def getWeights():
     return weights
 
 def setWeights(_weights):
     ind = 0
-    for name in weights_name:
-        weights[name] = weights[ind]
-        ind += 1
-
-weights_names = ["distance", "reward", "mass"]
-
-def getWeights():
-    return weights
-
-def setWeights(_weights):
-    ind = 0
-    for name in weights_name:
+    for name in weights.keys():
         weights[name] = weights[ind]
         ind += 1
 
