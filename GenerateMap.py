@@ -41,7 +41,7 @@ def writeMap(cylinder_list):
         f.write(str(cylinder[0]) + "    " + str(cylinder[1]) + "    " + str(cylinder[2]) + "\n")
     f.close()
 
-def generate(cylinder_number, x_max = 20, y_max = 25, x_min = 0, y_min = 0, distance_threshold = 1):
+def generate(cylinder_number, x_max = 25, y_max = 20, x_min = 0, y_min = 0, distance_threshold = 1):
     writeMap(generateMap(cylinder_number, x_max, y_max, x_min, y_min, distance_threshold))
 
-generate(30)
+generate(20)
