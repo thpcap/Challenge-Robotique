@@ -12,7 +12,7 @@ class Robot:
         self.b0 = 0.01
         self.alpha = 0.0698
         self.v0 = 1
-        self.reward=0;
+        self.reward=0
 
     def vitesse(self):
         return self.v0 * math.exp(-self.alpha * self.mass)
