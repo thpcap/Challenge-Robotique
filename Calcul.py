@@ -2,6 +2,7 @@ from Cylindres import *
 from input import *
 from Robot import *
 from links import *
+from GenerateMap import generate
 import math
 import matplotlib.pyplot as plt
 import matplotlib.patches as pat
@@ -21,6 +22,8 @@ def path(robot, cylindres):
         Output_Str=""
         robot = Robot()
         fig, ax = plt.subplots()
+        reward_list = [0]
+        mass_list = [0]
         plt.xlim(-5,30)
         plt.ylim(-5,25)
         plt.grid(linestyle='--')
@@ -34,6 +37,8 @@ def path(robot, cylindres):
         ax.add_artist(pat.Rectangle((-0.4, -0.4), 0.8, 0.8, color = 'magenta'))
         ax.plot((1,0),(0,0),color='magenta')
 
+        time = 0
+        times = [0]
         while (robot.fuel > 0 and len(cylindres)):
             #calcule le meilleur cylindre à  atteindre
             best = cylindres[0]
@@ -44,31 +49,45 @@ def path(robot, cylindres):
                     best_value = value
                     best = cylindre
             cylindres.remove(best)
-            robot.reward+=best.Valeur
             x=robot.x
             y=robot.y
             #calcule la nouvelle position du robot et le deplassement
             dist = robot.Distance(best)
+            time += dist/robot.vitesse()
             angl=robot.angle(best)
 
+            robot.reward+=best.Valeur
             robot.orientation += angl
             robot.fuel = robot.consumption() * dist
             robot.mass += best.Masse
             robot.x += (math.cos(math.pi/2 - robot.orientation) * dist)
             robot.y += (math.sin(math.pi/2 - robot.orientation) * dist)
+
             ax.plot((robot.x,x),(robot.y,y),color='black')
+            times.append(time)
+            reward_list.append(robot.reward)
+            mass_list.append(robot.mass)
             circle = plt.Circle((robot.x,robot.y ), 0.1, color='black')
             ax.add_artist(circle)
 
             #add Commands for the Robot
             Output_Str+="TURN "+str(-angl*(180/math.pi))+"\n"
-            Output_Str+="GO "+str(dist)+"\n"            
+            Output_Str+="GO "+str(dist)+"\n"
+
+        plt.title('path '+str(robot.reward), fontsize=8)
+        fig2, axs = plt.subplots(2)
+        ax2=axs[0]
+        ax3=axs[1]
+        plt.title('reward/mass', fontsize=8)
+        ax2.plot(reward_list, time, color="blue")
+        ax3.plot(mass_list, time, 0, color="black")            
         Output_Str+="FINISH"
         Output_File.write(Output_Str)
         Output_File.close()
-        plt.title('path '+str(robot.reward), fontsize=8)
+        
         plt.show()
-     
+
+generate(30)
 cylindres=Input_Map(input_link)
 robot=Robot()   
 path(robot,cylindres)
