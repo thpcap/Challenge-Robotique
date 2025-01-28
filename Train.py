@@ -31,7 +31,8 @@ def train(generations = 100, mutation = 1,  mutation_factor = 2, maps = 10):
         if avg_reward > best_reward:
             best_reward = avg_reward
             ind_best = i+1
-        print(avg_reward)
+        if (i%100 == 0):
+            print(avg_reward)
     print("\n")
     print(best_reward)
     print(reward_list[ind_best])
@@ -48,4 +49,4 @@ def generateRandomWeights(mutation, mutation_factor, weights):
         weights[j] += random.random()*mutation_factor*2 - mutation_factor
     return weights
 
-train(1000)
+train(10000)
