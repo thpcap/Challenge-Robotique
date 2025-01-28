@@ -4,7 +4,7 @@ from Cylindres import *
 def distance(ax, ay, bx, by):
     return ((ax-bx)**2 + (ay-by)**2)**0.5
 
-def generateMap(cylinder_number, x_max = 25, y_max = 20, x_min = 0, y_min = 0, distance_threshold = 1):
+def generateMap(cylinder_number, x_max = 25, y_max = 20, x_min = 0, y_min = 0, distance_threshold = 4):
     cylinder_list = []
     for i in range(cylinder_number):
         flag = True
@@ -37,7 +37,7 @@ def writeMap(cylinder_list):
         f.write(str(cylinder.x) + "    " + str(cylinder.y) + "    " + str(cylinder.Type) + "\n")
     f.close()
 
-def generate(cylinder_number, x_max = 25, y_max = 20, x_min = 0, y_min = 0, distance_threshold = 1):
+def generate(cylinder_number, x_max = 25, y_max = 20, x_min = 0, y_min = 0, distance_threshold = 4):
     writeMap(generateMap(cylinder_number, x_max, y_max, x_min, y_min, distance_threshold))
 
 generate(20)
