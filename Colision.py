@@ -40,10 +40,3 @@ def intersectSegmentCircle(robot, cylindre, cylindre2):
 
     return (is_between(robot.x, cylindre.x, x1) and is_between(robot.y, cylindre.y, y1)) or \
            (is_between(robot.x, cylindre.x, x2) and is_between(robot.y, cylindre.y, y2))
-
-#exemple
-cyl1 = Cylindres(1, 2, 10, 1)
-cyl2 = Cylindres(1, 0, 3, 1)
-rob = Robot()
-rob.x = -7
-print(intersectSegmentCircle(rob, cyl1, cyl2))
