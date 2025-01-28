@@ -80,8 +80,9 @@ def path(robot, cylindres, train=False):
                         robot.reward += cyl.Valeur
                         robot.mass += cyl.Masse
                         cylindres.remove(cyl)
-                        circle = plt.Circle((cyl.x,cyl.y ), cyl.Rayon/3, color='white')
-                        ax.add_artist(circle)            
+                        if(not train) :
+                            circle = plt.Circle((cyl.x,cyl.y ), cyl.Rayon/3, color='white')
+                            ax.add_artist(circle)            
                         
         robot.reward+=best.Valeur
         robot.orientation += angl
