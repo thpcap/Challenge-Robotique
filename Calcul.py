@@ -10,10 +10,12 @@ import matplotlib.patches as pat
 
 
 weights={
-    "distance": -2,
-    "reward": 8,
-    "mass": -2,
-    "collision":1
+    "distance": -7,
+    "reward": 7,
+    "mass": 16,
+    "collision":-6,
+    "variation":7
+
 }
 
 def getWeights():
@@ -26,7 +28,7 @@ def setWeights(_weights):
         ind += 1
 
 def h(robot, cylindre):
-    return robot.Distance(cylindre)*weights["distance"] + cylindre.Valeur * weights["reward"] + cylindre.Masse*weights["mass"]
+    return robot.Distance(cylindre)*weights["distance"]+weights["variation"]*robot.fuel + cylindre.Valeur * weights["reward"] + cylindre.Masse*weights["mass"]
 
 def path(robot, cylindres, train=False):    
     robot = Robot()
