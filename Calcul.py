@@ -8,6 +8,8 @@ import math
 import matplotlib.pyplot as plt
 import matplotlib.patches as pat
 
+train=False
+
 weights={
     "distance": -2,
     "reward": 10,
@@ -47,7 +49,7 @@ def path(robot, cylindres):
             for cylindre in cylindres:
                 value = h(robot, cylindre)
                 for cyl in cylindres:
-                    if cyl.id!=cylindre.id:
+                    if cyl.Id!=cylindre.Id:
                         if intersectSegmentCircle(robot,cylindre,cyl):
                             value+=cyl.Valeur*weights["reward"]+cyl.Masse*weights["mass"]
                 if best_value < value:
@@ -59,10 +61,17 @@ def path(robot, cylindres):
             #calcule la nouvelle position du robot et le deplassement
             dist = robot.Distance(best)
             angl = robot.angle(best)
-
+            
+            for cyl in cylindres:
+                    if cyl.Id!=best.Id:
+                        if intersectSegmentCircle(robot,best,cyl):
+                            robot.reward += cyl.Valeur
+                            robot.mass += cyl.Masse
+                            cylindres.remove(cyl)                            
+                            
             robot.reward+=best.Valeur
             robot.orientation += angl
-            robot.fuel = robot.consumption() * dist
+            robot.fuel -= robot.consumption() * dist
             robot.mass += best.Masse
             robot.x += (math.cos(math.pi/2 - robot.orientation) * dist)
             robot.y += (math.sin(math.pi/2 - robot.orientation) * dist)
