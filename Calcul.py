@@ -71,13 +71,16 @@ def path(robot, cylindres, train=False):
         #calcule la nouvelle position du robot et le deplassement
         dist = robot.Distance(best)
         angl = robot.angle(best)
-        
+        circle = plt.Circle((best.x,best.y ), best.Rayon/3, color='white')
+        ax.add_artist(circle)
         for cyl in cylindres:
                 if cyl.Id!=best.Id:
                     if intersectSegmentCircle(robot,best,cyl):
                         robot.reward += cyl.Valeur
                         robot.mass += cyl.Masse
-                        cylindres.remove(cyl)                            
+                        cylindres.remove(cyl)
+                        circle = plt.Circle((cyl.x,cyl.y ), cyl.Rayon/3, color='white')
+                        ax.add_artist(circle)            
                         
         robot.reward+=best.Valeur
         robot.orientation += angl
