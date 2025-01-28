@@ -2,6 +2,7 @@ from Cylindres import *
 from input import *
 from Robot import *
 from links import *
+from Colision import *
 from GenerateMap import generate
 import math
 import matplotlib.pyplot as plt
@@ -45,6 +46,10 @@ def path(robot, cylindres):
             best_value = 0
             for cylindre in cylindres:
                 value = h(robot, cylindre)
+                for cyl in cylindres:
+                    if cyl.id!=cylindre.id:
+                        if intersectSegmentCircle(robot,cylindre,cyl):
+                            value+=cyl.Valeur*weights["reward"]+cyl.Masse*weights["mass"]
                 if best_value < value:
                     best_value = value
                     best = cylindre
