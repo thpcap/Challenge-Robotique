@@ -7,9 +7,9 @@ import matplotlib.pyplot as plt
 import matplotlib.patches as pat
 
 weights={
-    "distance": -0.5,
-    "reward": 20,
-    "mass": -1
+    "distance": -2,
+    "reward": 10,
+    "mass": -2
 }
 
 def h(robot, cylindre):
@@ -33,7 +33,6 @@ def path(robot, cylindres):
         ax.add_artist(pat.Rectangle((-0.5, -0.5), 1, 1, color = 'black'))
         ax.add_artist(pat.Rectangle((-0.4, -0.4), 0.8, 0.8, color = 'magenta'))
         ax.plot((1,0),(0,0),color='magenta')
-        path = []
 
         while (robot.fuel > 0 and len(cylindres)):
             #calcule le meilleur cylindre à  atteindre
@@ -44,8 +43,8 @@ def path(robot, cylindres):
                 if best_value < value:
                     best_value = value
                     best = cylindre
-            path.append(best)
             cylindres.remove(best)
+            robot.reward+=best.Valeur
             x=robot.x
             y=robot.y
             #calcule la nouvelle position du robot et le deplassement
@@ -58,6 +57,8 @@ def path(robot, cylindres):
             robot.x += (math.cos(math.pi/2 - robot.orientation) * dist)
             robot.y += (math.sin(math.pi/2 - robot.orientation) * dist)
             ax.plot((robot.x,x),(robot.y,y),color='black')
+            circle = plt.Circle((robot.x,robot.y ), 0.1, color='black')
+            ax.add_artist(circle)
 
             #add Commands for the Robot
             Output_Str+="TURN "+str(-angl*(180/math.pi))+"\n"
@@ -65,7 +66,7 @@ def path(robot, cylindres):
         Output_Str+="FINISH"
         Output_File.write(Output_Str)
         Output_File.close()
-        plt.title('path', fontsize=8)
+        plt.title('path '+str(robot.reward), fontsize=8)
         plt.show()
      
 cylindres=Input_Map(input_link)
