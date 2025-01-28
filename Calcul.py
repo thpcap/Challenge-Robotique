@@ -53,8 +53,7 @@ def path(robot, cylindres):
             y=robot.y
             #calcule la nouvelle position du robot et le deplassement
             dist = robot.Distance(best)
-            time += dist/robot.vitesse()
-            angl=robot.angle(best)
+            angl = robot.angle(best)
 
             robot.reward+=best.Valeur
             robot.orientation += angl
@@ -62,6 +61,7 @@ def path(robot, cylindres):
             robot.mass += best.Masse
             robot.x += (math.cos(math.pi/2 - robot.orientation) * dist)
             robot.y += (math.sin(math.pi/2 - robot.orientation) * dist)
+            time += dist/robot.vitesse()
 
             ax.plot((robot.x,x),(robot.y,y),color='black')
             times.append(time)
@@ -79,8 +79,8 @@ def path(robot, cylindres):
         ax2=axs[0]
         ax3=axs[1]
         plt.title('reward/mass', fontsize=8)
-        ax2.plot(reward_list, time, color="blue")
-        ax3.plot(mass_list, time, 0, color="black")            
+        ax2.plot(times, reward_list, color="blue")
+        ax3.plot(times, mass_list, 0, color="black")            
         Output_Str+="FINISH"
         Output_File.write(Output_Str)
         Output_File.close()
