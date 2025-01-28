@@ -115,10 +115,3 @@ def path(robot, cylindres, train=False):
         Output_File.close()
         plt.show()
     return robot.reward
-        
-
-generate(20)
-cylindres=Input_Map(input_link)
-robot=Robot()   
-path(robot,cylindres)
-print("finished")
