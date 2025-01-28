@@ -22,7 +22,7 @@ def getWeights():
 def setWeights(_weights):
     ind = 0
     for name in weights.keys():
-        weights[name] = weights[ind]
+        weights[name] = _weights[ind]
         ind += 1
 
 def h(robot, cylindre):
