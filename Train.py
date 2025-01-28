@@ -1,8 +1,9 @@
 import random
 from Calcul import *
 from GenerateMap import *
+import datetime
 
-def train(generations = 100, mutation = 1,  mutation_factor = 2, maps = 10):
+def train(generations = 100, mutation = 1,  mutation_factor = 2, maps = 100):
     generate(20)
     cylindres=generateMap(20)
     robot=Robot()
@@ -16,7 +17,7 @@ def train(generations = 100, mutation = 1,  mutation_factor = 2, maps = 10):
     best_reward = reward_list[0]
     print(best_reward)
     for i in range(generations):
-        #weights = weights_list[ind_best]
+        weights = weights_list[ind_best]
         weights = generateRandomWeights(mutation, mutation_factor, weights)
         weights_list.append(weights)
         setWeights(weights)
@@ -32,7 +33,7 @@ def train(generations = 100, mutation = 1,  mutation_factor = 2, maps = 10):
             best_reward = avg_reward
             ind_best = i+1
         if (i%100 == 0):
-            print(avg_reward)
+            print(str(avg_reward) + "  |   " + str(datetime.datetime.now()))
     print("\n")
     print(best_reward)
     print(reward_list[ind_best])
@@ -49,4 +50,4 @@ def generateRandomWeights(mutation, mutation_factor, weights):
         weights[j] += random.random()*mutation_factor*2 - mutation_factor
     return weights
 
-train(10000)
+train(generations = 1000, mutation = 1, mutation_factor = 0.5)
