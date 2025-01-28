@@ -1,13 +1,14 @@
 from Cylindres import *
 from input import *
 from Robot import *
+from links import *
 import math
 import matplotlib.pyplot as plt
 import matplotlib.patches as pat
 
 weights={
     "distance": -0.5,
-    "reward": 1,
+    "reward": 20,
     "mass": -1
 }
 
@@ -16,7 +17,7 @@ def h(robot, cylindre):
 
 def path(robot, cylindres):
     #ouvre le fichier d'output
-    with open("output.txt",mode="w")as Output_File:
+    with open(output_link,mode="w")as Output_File:
         Output_Str=""
         robot = Robot()
         fig, ax = plt.subplots()
@@ -67,7 +68,6 @@ def path(robot, cylindres):
         plt.title('path', fontsize=8)
         plt.show()
      
-cylindres=Input_Map("C:\CHALLENGE\donnees-map.txt")
-
+cylindres=Input_Map(input_link)
 robot=Robot()   
 path(robot,cylindres)
