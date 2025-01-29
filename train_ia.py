@@ -4,12 +4,9 @@ from Calcul import *
 from GenerateMap import *
 import datetime
 from input import *
+import numpy as np
 
-def calculate_reward(weights, mutation, mutation_factor):
-    # Mutate weights
-    new_weights = [w + random.uniform(-mutation, mutation) * mutation_factor for w in weights]
-    setWeights(new_weights)
-
+def calculate_reward():
     # Generate new map and robot
     #cylindres = generateMap(20)
     input_link =int(random.choice(range(1,10)))
@@ -18,48 +15,54 @@ def calculate_reward(weights, mutation, mutation_factor):
 
     # Calculate reward
     reward = path(robot, cylindres, True)
-    return new_weights, reward
+    return reward
 
-def train(generations=100, mutation=1, mutation_factor=2, maps=100):
+def train(generations=100, mutation=1, mutation_factor=1, maps=100):
     # Generate initial map and robot
-    generate(20)
-    cylindres = generateMap(20)
+    #generate(20)
+    #cylindres = generateMap(20)
+    cylindres= Input_Map('map.csv')
     robot = Robot()
 
     # Initialize weights and rewards
     weights = list(getWeights().values())
     weights_list = [weights]
-    reward_list = [path(robot, cylindres, True)]
+    first_reward = path(robot, cylindres, True)
+    print(first_reward)
+    reward_list = [first_reward]
 
     for generation in range(generations):
-        new_weights_list = []
+        weights=weights_list[reward_list.index(max(reward_list))]
         new_reward_list = []
-
+        weights = [w + random.uniform(-mutation, mutation) * mutation_factor for w in weights]
+        setWeights(weights)
         with concurrent.futures.ThreadPoolExecutor() as executor:
-            futures = [executor.submit(calculate_reward, weights, mutation, mutation_factor) for _ in range(maps)]
+            futures = [executor.submit(calculate_reward) for _ in range(maps)]
             for future in concurrent.futures.as_completed(futures):
-                new_weights, reward = future.result()
-                new_weights_list.append(new_weights)
+                reward = future.result()
                 new_reward_list.append(reward)
 
-        # Select the best weights
-        best_index = new_reward_list.index(max(new_reward_list))
-        weights = new_weights_list[best_index]
+        # Select the average weights
+        avg_reward=np.mean(new_reward_list)
         weights_list.append(weights)
-        reward_list.append(new_reward_list[best_index])
+        reward_list.append(avg_reward)
 
         # Reduce mutation factor over time
         mutation_factor *= 0.99
 
         # Print progress
-        print(f"Generation {generation + 1}/{generations}, Best Reward: {new_reward_list[best_index]},mutation factor {mutation_factor}")
+        print(f"Generation {generation + 1}/{generations}, Best Reward: {avg_reward},mutation factor {mutation_factor}")
 
     # Save the best weights
     setWeights(weights)
-    print("Best weights:", weights)
+    print("Best generation:", reward_list.index(max(reward_list)) )
+    print("Best weights:")
+    for w in weights:
+        keys_w=getWeightsKeys()
+        print("\""+keys_w[weights.index(w)]+"\":"+str(w),end=",")
     print("Best reward:", max(reward_list))
 
     return weights_list, reward_list
 
 if __name__ == "__main__":
-    train(100,maps=100)
+    train(1000,mutation=10,maps=100)

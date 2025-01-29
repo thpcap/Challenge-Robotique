@@ -10,16 +10,14 @@ import matplotlib.patches as pat
 
 
 weights={
-    "distance": -15,
-    "reward": 5,
-    "mass": 22,
-    "collision":-7,
-    "variation":13
-
+    "distance":-11.61204728011344,"reward":-5.15454167897293,"mass":25.61750742456137,"collision":-20.447788446866763,"variation":5.050493644938008
 }
 
 def getWeights():
     return weights
+
+def getWeightsKeys():
+    return list(weights.keys())
 
 def setWeights(_weights):
     ind = 0
