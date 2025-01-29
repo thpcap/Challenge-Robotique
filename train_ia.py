@@ -6,10 +6,10 @@ import datetime
 from input import *
 import numpy as np
 
-def calculate_reward():
+def calculate_reward(mapid):
     # Generate new map and robot
     #cylindres = generateMap(20)
-    input_link =int(random.choice(range(1,10)))
+    input_link =int(mapid)
     cylindres=Input_Map('test_Maps\donnees-map-'+str(input_link)+'.txt')
     robot = Robot()
 
@@ -36,8 +36,8 @@ def train(generations=100, mutation=1, mutation_factor=1, maps=100):
         new_reward_list = []
         weights = [w + random.uniform(-mutation, mutation) * mutation_factor for w in weights]
         setWeights(weights)
-        with concurrent.futures.ThreadPoolExecutor() as executor:
-            futures = [executor.submit(calculate_reward) for _ in range(maps)]
+        with concurrent.futures.ThreadPoolExecutor(10) as executor:
+            futures = [executor.submit(calculate_reward,i+1) for i in range(maps)]
             for future in concurrent.futures.as_completed(futures):
                 reward = future.result()
                 new_reward_list.append(reward)
@@ -48,7 +48,7 @@ def train(generations=100, mutation=1, mutation_factor=1, maps=100):
         reward_list.append(avg_reward)
 
         # Reduce mutation factor over time
-        mutation_factor *= 0.99
+        mutation_factor *= (generations-1)/generations
 
         # Print progress
         print(f"Generation {generation + 1}/{generations}, Best Reward: {avg_reward},mutation factor {mutation_factor}")
@@ -65,4 +65,4 @@ def train(generations=100, mutation=1, mutation_factor=1, maps=100):
     return weights_list, reward_list
 
 if __name__ == "__main__":
-    train(1000,mutation=10,maps=100)
+    train(10000,mutation=10,maps=10)
