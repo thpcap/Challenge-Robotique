@@ -50,4 +50,4 @@ def generateRandomWeights(mutation, mutation_factor, weights):
         weights[j] += random.random()*mutation_factor*2 - mutation_factor
     return weights
 
-train(generations = 1000, mutation = 1, mutation_factor = 0.5)
+train(generations = 100000, mutation = 1, mutation_factor = 0.5)
