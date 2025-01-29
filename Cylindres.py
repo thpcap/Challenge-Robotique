@@ -1,5 +1,5 @@
 class Cylindres:
-    def __init__(self,Id,x,y,Type,Rayon=0.7):
+    def __init__(self,Id,x,y,Type,Rayon=1.4):
         self.Id=Id
         self.Rayon=Rayon
         self.x=x

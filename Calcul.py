@@ -3,14 +3,14 @@ from input import *
 from Robot import *
 from links import *
 from Colision import *
-from GenerateMap import generate
+from GenerateMap import *
 import math
 import matplotlib.pyplot as plt
 import matplotlib.patches as pat
 
 
 weights={
-    "distance":-11.61204728011344,"reward":-5.15454167897293,"mass":25.61750742456137,"collision":-20.447788446866763,"variation":5.050493644938008
+    "distance":-11.612353028252711,"reward":-5.154801087961971,"mass":25.617833629673797,"collision":-20.447390989435135,"variation":5.050552594485818
 }
 
 def getWeights():
@@ -26,6 +26,8 @@ def setWeights(_weights):
         ind += 1
 
 def h(robot, cylindre):
+    if robot.consumption()*robot.Distance(cylindre)>robot.fuel:
+        return -100000
     return robot.Distance(cylindre)*weights["distance"]+weights["variation"]*robot.fuel + cylindre.Valeur * weights["reward"] + cylindre.Masse*weights["mass"]
 
 def path(robot, cylindres, train=False):    
@@ -42,8 +44,8 @@ def path(robot, cylindres, train=False):
         ax.set_aspect(1)
         nbCyl=len(cylindres)
         for Cyl in cylindres:
-            circle = plt.Circle((Cyl.x,Cyl.y ), Cyl.Rayon, color='black')
-            circle2 = plt.Circle((Cyl.x,Cyl.y ), Cyl.Rayon-0.1, color=Cyl.color)
+            circle = plt.Circle((Cyl.x,Cyl.y ), Cyl.Rayon+0.05, color='orange')
+            circle2 = plt.Circle((Cyl.x,Cyl.y ), 1, color=Cyl.color)
             ax.add_artist(circle)
             ax.add_artist(circle2)
         ax.add_artist(pat.Rectangle((-0.5, -0.5), 1, 1, color = 'black'))
@@ -52,6 +54,7 @@ def path(robot, cylindres, train=False):
 
     time = 0
     times = [0]
+    fuel_list=[robot.fuel]
     while (robot.fuel > 0 and len(cylindres) and time<=600):
         #calcule le meilleur cylindre à  atteindre
         best = cylindres[0]
@@ -91,7 +94,7 @@ def path(robot, cylindres, train=False):
         robot.x += (math.cos(math.pi/2 - robot.orientation) * dist)
         robot.y += (math.sin(math.pi/2 - robot.orientation) * dist)
         time += dist/robot.vitesse()
-
+        fuel_list.append(robot.fuel)
         times.append(time)
         reward_list.append(robot.reward)
         mass_list.append(robot.mass)
@@ -109,9 +112,9 @@ def path(robot, cylindres, train=False):
         _, axs = plt.subplots(2)
         ax2=axs[0]
         ax3=axs[1]
-        plt.title('reward/mass', fontsize=8)
+        plt.title('reward/mass'+str(time), fontsize=8)
         ax2.plot(times, reward_list, color="blue")
-        ax3.plot(times, mass_list, 0, color="black")            
+        ax3.plot(times, fuel_list, 0, color="black")            
     
     
     if(not train) : 
