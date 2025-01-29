@@ -31,31 +31,9 @@ def h(robot, cylindre):
 
     return robot.Distance(cylindre)*weights["distance"]+weights["variation"]*robot.fuel + cylindre.Valeur * weights["reward"] + cylindre.Masse*weights["mass"]
 
-def path(robot, cylindres, train=False):    
-    robot = Robot()
-    reward_list = [0]
-    mass_list = [0]
-    if(not train) : 
-        Output_File = open(output_link,mode="w")
-        Output_Str=""
-        _, ax = plt.subplots()
-        plt.xlim(-5,30)
-        plt.ylim(-5,25)
-        plt.grid(linestyle='--')
-        ax.set_aspect(1)
-        nbCyl=len(cylindres)
-        for Cyl in cylindres:
-            circle = plt.Circle((Cyl.x,Cyl.y ), Cyl.Rayon+0.05, color='orange')
-            circle2 = plt.Circle((Cyl.x,Cyl.y ), 1, color=Cyl.color)
-            ax.add_artist(circle)
-            ax.add_artist(circle2)
-        ax.add_artist(pat.Rectangle((-0.5, -0.5), 1, 1, color = 'black'))
-        ax.add_artist(pat.Rectangle((-0.4, -0.4), 0.8, 0.8, color = 'magenta'))
-        ax.plot((1,0),(0,0),color='magenta')
-
+def path(robot, cylindres):
+    path = []
     time = 0
-    times = [0]
-    fuel_list=[robot.fuel]
     while (robot.fuel > 0 and len(cylindres) and time<=600):
         #calcule le meilleur cylindre à  atteindre
         best = cylindres[0]
@@ -70,59 +48,119 @@ def path(robot, cylindres, train=False):
                 best_value = value
                 best = cylindre
         cylindres.remove(best)
-        x=robot.x
-        y=robot.y
         #calcule la nouvelle position du robot et le deplassement
         dist = robot.Distance(best)
         angl = robot.angle(best)
         
         for cyl in cylindres:
-                if cyl.Id!=best.Id:
-                    if intersectSegmentCircle(robot,best,cyl):
-                        robot.reward += cyl.Valeur
-                        robot.mass += cyl.Masse
-                        cylindres.remove(cyl)
-                        if(not train) :
-                            circle = plt.Circle((cyl.x,cyl.y ), cyl.Rayon/3, color='white')
-                            ax.add_artist(circle)            
+            if cyl.Id!=best.Id:
+                if intersectSegmentCircle(robot,best,cyl):
+                    robot.reward += cyl.Valeur
+                    robot.mass += cyl.Masse
+                    cylindres.remove(cyl)         
                         
         robot.orientation += angl
         robot.fuel -= robot.consumption() * dist
         if robot.fuel >= 0:
-            if(not train) :
-                circle = plt.Circle((best.x,best.y ), best.Rayon/3, color='white')
-                ax.add_artist(circle)
             robot.reward+=best.Valeur
             robot.mass += best.Masse
             robot.x += (math.cos(math.pi/2 - robot.orientation) * dist)
             robot.y += (math.sin(math.pi/2 - robot.orientation) * dist)
             time += dist/robot.vitesse()
-            fuel_list.append(robot.fuel)
-            times.append(time)
-            reward_list.append(robot.reward)
-            mass_list.append(robot.mass)
-            if(not train) : 
-                ax.plot((robot.x,x),(robot.y,y),color='black')
-                circle = plt.Circle((robot.x,robot.y ), 0.1, color='black')
-                ax.add_artist(circle)
-                #add Commands for the Robot
-                Output_Str+="TURN "+str(-angl*(180/math.pi))+"\n"
-                Output_Str+="GO "+str(dist)+"\n"
 
-    
-    if(not train) :
-        plt.title('path reward='+str(robot.reward)+" nbCyl="+str(nbCyl) + " fuel="+str(robot.fuel), fontsize=8)
-        _, axs = plt.subplots(2)
-        ax2=axs[0]
-        ax3=axs[1]
-        plt.title('reward/mass'+str(time), fontsize=8)
-        ax2.plot(times, reward_list, color="blue")
-        ax3.plot(times, fuel_list, 0, color="black")            
-    
-    
-    if(not train) : 
-        Output_Str+="FINISH"
-        Output_File.write(Output_Str)
-        Output_File.close()
-        plt.show()
-    return robot.reward
+            path.append(best)       
+    return (robot.reward, path)
+
+def drawPath(path, cylindres):
+    robot = Robot()
+    # Initialize variables for graph
+    reward_list = [0]
+    mass_list = [0]
+    time = 0
+    times = [0]
+    fuel_list=[robot.fuel]
+    # Initialize variables for plot
+    _, ax = plt.subplots()
+    plt.xlim(-5,30)
+    plt.ylim(-5,25)
+    plt.grid(linestyle='--')
+    ax.set_aspect(1)
+    nbCyl=len(cylindres)
+    for Cyl in cylindres:
+        circle = plt.Circle((Cyl.x,Cyl.y ), Cyl.Rayon+0.05, color='orange')
+        circle2 = plt.Circle((Cyl.x,Cyl.y ), 1, color=Cyl.color)
+        ax.add_artist(circle)
+        ax.add_artist(circle2)
+    ax.add_artist(pat.Rectangle((-0.5, -0.5), 1, 1, color = 'black'))
+    ax.add_artist(pat.Rectangle((-0.4, -0.4), 0.8, 0.8, color = 'magenta'))
+    ax.plot((1,0),(0,0),color='magenta')
+
+    for point in path:
+        total_value = 0
+        total_mass = 0
+        for cyl in cylindres:
+            if cyl.Id!=point.Id:
+                if intersectSegmentCircle(robot,point,cyl):
+                    total_value += cyl.Valeur
+                    total_mass += cyl.Masse
+                    cylindres.remove(cyl)
+                    circle = plt.Circle((cyl.x,cyl.y ), cyl.Rayon/3, color='white')
+                    ax.add_artist(circle)
+        
+        x=robot.x
+        y=robot.y
+        dist = robot.Distance(point)
+        angl = robot.angle(point)
+        robot.orientation += angl
+        robot.fuel -= robot.consumption() * dist
+        
+        circle = plt.Circle((point.x,point.y ), point.Rayon/3, color='white')
+        ax.add_artist(circle)
+
+        robot.reward+=point.Valeur + total_value
+        robot.mass += point.Masse + total_mass
+        robot.x += (math.cos(math.pi/2 - robot.orientation) * dist)
+        robot.y += (math.sin(math.pi/2 - robot.orientation) * dist)
+
+        time += dist/robot.vitesse()
+        fuel_list.append(robot.fuel)
+        times.append(time)
+        reward_list.append(robot.reward)
+        mass_list.append(robot.mass)
+
+        ax.plot((robot.x,x),(robot.y,y),color='black')
+        circle = plt.Circle((robot.x,robot.y ), 0.1, color='black')
+        ax.add_artist(circle)
+
+    # Display graphs and plots
+    plt.title('path reward='+str(robot.reward)+" nbCyl="+str(nbCyl) + " fuel="+str(robot.fuel), fontsize=8)
+    _, axs = plt.subplots(2)
+    ax2=axs[0]
+    ax3=axs[1]
+    plt.title('reward/mass'+str(time), fontsize=8)
+    ax2.plot(times, reward_list, color="blue")
+    ax3.plot(times, fuel_list, 0, color="black")
+    plt.show()
+
+def pathToFile(path):
+    robot = Robot()
+    Output_File = open(output_link,mode="w")
+    Output_Str=""
+
+    for cyl in path:
+        dist = robot.Distance(cyl)
+        angl = robot.angle(cyl)
+        robot.orientation += angl
+        robot.fuel -= robot.consumption() * dist
+        robot.reward+=cyl.Valeur
+        robot.mass += cyl.Masse
+        robot.x += (math.cos(math.pi/2 - robot.orientation) * dist)
+        robot.y += (math.sin(math.pi/2 - robot.orientation) * dist)
+
+        #add Commands for the Robot
+        Output_Str+="TURN "+str(-angl*(180/math.pi))+"\n"
+        Output_Str+="GO "+str(dist)+"\n"
+
+    Output_Str+="FINISH"
+    Output_File.write(Output_Str)
+    Output_File.close()

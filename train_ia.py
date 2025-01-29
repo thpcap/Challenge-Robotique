@@ -14,7 +14,7 @@ def calculate_reward(mapid):
     robot = Robot()
 
     # Calculate reward
-    reward = path(robot, cylindres, True)
+    reward, _ = path(robot, cylindres)
     return reward
 
 def train(generations=100, mutation=1, mutation_factor=1, maps=100):
@@ -27,7 +27,7 @@ def train(generations=100, mutation=1, mutation_factor=1, maps=100):
     # Initialize weights and rewards
     weights = list(getWeights().values())
     weights_list = [weights]
-    first_reward = path(robot, cylindres, True)
+    first_reward, _ = path(robot, cylindres)
     print(first_reward)
     reward_list = [first_reward]
 
