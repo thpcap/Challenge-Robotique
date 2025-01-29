@@ -10,7 +10,7 @@ import matplotlib.patches as pat
 
 
 weights={
-    "distance":-31.73641784169041,"reward":14.7179371699533,"mass":30.331067567610134,"collision":-2.3138877444930697,"variation":6.159866326376777
+    "distance":-38.191172321404025,"reward":21.046409671461138,"mass":30.754965004055133,"collision":-0.7985437691024295
 }
 
 def getWeights():
@@ -29,7 +29,7 @@ def h(robot, cylindre):
     if robot.consumption()*robot.Distance(cylindre)>robot.fuel:
         return -float("inf")
 
-    return robot.Distance(cylindre)*weights["distance"]+weights["variation"]*robot.fuel + cylindre.Valeur * weights["reward"] + cylindre.Masse*weights["mass"]
+    return robot.Distance(cylindre)*weights["distance"] + cylindre.Valeur * weights["reward"] + cylindre.Masse*weights["mass"]
 
 def path(robot, cylindres, train=False):    
     robot = Robot()
