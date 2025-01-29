@@ -10,7 +10,7 @@ import matplotlib.patches as pat
 
 
 weights={
-    "distance":-10.29979999600649,"reward":-9.760186592225617,"mass":28.331574000760263,"collision":-18.637772710029918,"variation":6.08220970009376
+    "distance":-31.73641784169041,"reward":14.7179371699533,"mass":30.331067567610134,"collision":-2.3138877444930697,"variation":6.159866326376777
 }
 
 def getWeights():
@@ -27,7 +27,8 @@ def setWeights(_weights):
 
 def h(robot, cylindre):
     if robot.consumption()*robot.Distance(cylindre)>robot.fuel:
-        return -100000
+        return -float("inf")
+
     return robot.Distance(cylindre)*weights["distance"]+weights["variation"]*robot.fuel + cylindre.Valeur * weights["reward"] + cylindre.Masse*weights["mass"]
 
 def path(robot, cylindres, train=False):    
@@ -74,9 +75,7 @@ def path(robot, cylindres, train=False):
         #calcule la nouvelle position du robot et le deplassement
         dist = robot.Distance(best)
         angl = robot.angle(best)
-        if(not train) :
-            circle = plt.Circle((best.x,best.y ), best.Rayon/3, color='white')
-            ax.add_artist(circle)
+        
         for cyl in cylindres:
                 if cyl.Id!=best.Id:
                     if intersectSegmentCircle(robot,best,cyl):
@@ -87,28 +86,32 @@ def path(robot, cylindres, train=False):
                             circle = plt.Circle((cyl.x,cyl.y ), cyl.Rayon/3, color='white')
                             ax.add_artist(circle)            
                         
-        robot.reward+=best.Valeur
         robot.orientation += angl
         robot.fuel -= robot.consumption() * dist
-        robot.mass += best.Masse
-        robot.x += (math.cos(math.pi/2 - robot.orientation) * dist)
-        robot.y += (math.sin(math.pi/2 - robot.orientation) * dist)
-        time += dist/robot.vitesse()
-        fuel_list.append(robot.fuel)
-        times.append(time)
-        reward_list.append(robot.reward)
-        mass_list.append(robot.mass)
-        if(not train) : 
-            ax.plot((robot.x,x),(robot.y,y),color='black')
-            circle = plt.Circle((robot.x,robot.y ), 0.1, color='black')
-            ax.add_artist(circle)
-            #add Commands for the Robot
-            Output_Str+="TURN "+str(-angl*(180/math.pi))+"\n"
-            Output_Str+="GO "+str(dist)+"\n"
+        if robot.fuel >= 0:
+            if(not train) :
+                circle = plt.Circle((best.x,best.y ), best.Rayon/3, color='white')
+                ax.add_artist(circle)
+            robot.reward+=best.Valeur
+            robot.mass += best.Masse
+            robot.x += (math.cos(math.pi/2 - robot.orientation) * dist)
+            robot.y += (math.sin(math.pi/2 - robot.orientation) * dist)
+            time += dist/robot.vitesse()
+            fuel_list.append(robot.fuel)
+            times.append(time)
+            reward_list.append(robot.reward)
+            mass_list.append(robot.mass)
+            if(not train) : 
+                ax.plot((robot.x,x),(robot.y,y),color='black')
+                circle = plt.Circle((robot.x,robot.y ), 0.1, color='black')
+                ax.add_artist(circle)
+                #add Commands for the Robot
+                Output_Str+="TURN "+str(-angl*(180/math.pi))+"\n"
+                Output_Str+="GO "+str(dist)+"\n"
 
     
     if(not train) :
-        plt.title('path reward='+str(robot.reward)+" nbCyl="+str(nbCyl), fontsize=8)
+        plt.title('path reward='+str(robot.reward)+" nbCyl="+str(nbCyl) + " fuel="+str(robot.fuel), fontsize=8)
         _, axs = plt.subplots(2)
         ax2=axs[0]
         ax3=axs[1]
