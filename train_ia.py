@@ -51,7 +51,7 @@ def train(generations=100, mutation=1, mutation_factor=1, maps=100):
         mutation_factor *= (generations-1)/generations
 
         # Print progress
-        print(f"Generation {generation + 1}/{generations}, Best Reward: {avg_reward},mutation factor {mutation_factor}")
+        print(f"Generation {generation + 1}/{generations}, Avg Reward: {avg_reward}, Mutation Factor {mutation_factor}, {generation/generations}%")
 
     # Save the best weights
     setWeights(weights)
@@ -65,4 +65,4 @@ def train(generations=100, mutation=1, mutation_factor=1, maps=100):
     return weights_list, reward_list
 
 if __name__ == "__main__":
-    train(10000,mutation=20,maps=10)
+    train(10000,mutation=100,maps=10)
