@@ -3,6 +3,7 @@ import concurrent.futures
 from Calcul import *
 from GenerateMap import *
 import datetime
+from input import *
 
 def calculate_reward(weights, mutation, mutation_factor):
     # Mutate weights
@@ -10,7 +11,9 @@ def calculate_reward(weights, mutation, mutation_factor):
     setWeights(new_weights)
 
     # Generate new map and robot
-    cylindres = generateMap(20)
+    #cylindres = generateMap(20)
+    input_link =int(random.choice(range(1,10)))
+    cylindres=Input_Map('test_Maps\donnees-map-'+str(input_link)+'.txt')
     robot = Robot()
 
     # Calculate reward
@@ -59,4 +62,4 @@ def train(generations=100, mutation=1, mutation_factor=2, maps=100):
     return weights_list, reward_list
 
 if __name__ == "__main__":
-    train(1000,maps=1000)
+    train(100,maps=100)
