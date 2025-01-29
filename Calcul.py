@@ -10,11 +10,11 @@ import matplotlib.patches as pat
 
 
 weights={
-    "distance": -7,
-    "reward": 7,
-    "mass": 16,
-    "collision":-6,
-    "variation":7
+    "distance": -15,
+    "reward": 5,
+    "mass": 22,
+    "collision":-7,
+    "variation":13
 
 }
 
