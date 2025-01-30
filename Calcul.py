@@ -34,7 +34,7 @@ def h(robot, cylindre):
 def path(robot, cylindres):
     path = []
     time = 0
-    while (robot.fuel > 0 and len(cylindres) and time<=600):
+    while (len(cylindres)):
         #calcule le meilleur cylindre à  atteindre
         best = cylindres[0]
         best_value = 0
@@ -53,22 +53,43 @@ def path(robot, cylindres):
         angl = robot.angle(best)
         
         for cyl in cylindres:
-            if cyl.Id!=best.Id:
-                if intersectSegmentCircle(robot,best,cyl):
+            if intersectSegmentCircle(robot,best,cyl):
+                cylindres.remove(cyl)         
+                        
+        robot.orientation += angl
+        robot.x += (math.cos(math.pi/2 - robot.orientation) * dist)
+        robot.y += (math.sin(math.pi/2 - robot.orientation) * dist)
+
+        path.append(best)       
+    return path
+
+def simulatePath(path):
+    path = []
+    time = 0
+    for point in path:
+        #calcule la nouvelle position du robot et le deplassement
+        dist = robot.Distance(point)
+        angl = robot.angle(point)
+        
+        for cyl in cylindres:
+            if cyl.Id!=point.Id:
+                if intersectSegmentCircle(robot,point,cyl):
                     robot.reward += cyl.Valeur
                     robot.mass += cyl.Masse
                     cylindres.remove(cyl)         
                         
         robot.orientation += angl
         robot.fuel -= robot.consumption() * dist
-        if robot.fuel >= 0:
-            robot.reward+=best.Valeur
-            robot.mass += best.Masse
-            robot.x += (math.cos(math.pi/2 - robot.orientation) * dist)
-            robot.y += (math.sin(math.pi/2 - robot.orientation) * dist)
-            time += dist/robot.vitesse()
+        time += dist/robot.vitesse()
+        if (robot.fuel < 0 and time>=600):
+            break
 
-            path.append(best)       
+        robot.mass += point.Masse
+        robot.reward+=point.Valeur
+        robot.x += (math.cos(math.pi/2 - robot.orientation) * dist)
+        robot.y += (math.sin(math.pi/2 - robot.orientation) * dist)
+
+        path.append(point)    
     return (robot.reward, path)
 
 def drawPath(path, cylindres):
