@@ -201,7 +201,8 @@ def optimizePath(path):
             for j in range(i+1, len(path)):
                 if i!=j and intersect(path[i-1], path[i], path[j-1], path[j]):
                     flag = True
-                    path.insert(i, path.pop(j-1))
+                    path[i:j] = reversed(path[i:j])
+                    print(" intersection detected" +str(k))
                     break
     
     return path
