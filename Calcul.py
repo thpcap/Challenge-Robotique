@@ -78,8 +78,8 @@ def simulatePath(path, cylindres):
                     robot.reward += cyl.Valeur
                     robot.mass += cyl.Masse
                     cylindres.remove(cyl)         
-                        
-        cylindres.remove(point)
+        if point in cylindres:
+            cylindres.remove(point)
         robot.orientation += angl
         robot.fuel -= robot.consumption() * dist
         time += dist/robot.vitesse()
@@ -190,19 +190,23 @@ def pathToFile(path):
     Output_File.close()
 
 def optimizePath(path):
-    flag = True
-    k = 0
-    while flag and k < 100:
-        k += 1
-        flag = False
-        for i in range(1, len(path)):
-            if flag:
-                break
-            for j in range(i+1, len(path)):
-                if i!=j and intersect(path[i-1], path[i], path[j-1], path[j]):
-                    flag = True
-                    path[i:j] = reversed(path[i:j])
-                    print(" intersection detected" +str(k))
+    def path_crosses_itself(path):
+        for i in range(len(path) - 1):
+            for j in range(i + 2, len(path) - 1):
+                if intersect(path[i], path[i + 1], path[j], path[j + 1]):
+                    return True
+        return False
+
+    optimized_path = path[:]
+    while path_crosses_itself(optimized_path):
+        for i in range(len(optimized_path) - 1):
+            for j in range(i + 2, len(optimized_path) - 1):
+                if intersect(optimized_path[i], optimized_path[i + 1], optimized_path[j], optimized_path[j + 1]):
+                    # Swap the segments to avoid intersection
+                    optimized_path[i + 1], optimized_path[j] = optimized_path[j], optimized_path[i + 1]
                     break
-    
-    return path
+            else:
+                continue
+            break
+
+    return optimized_path

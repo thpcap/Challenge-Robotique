@@ -14,9 +14,13 @@ def calculate_reward(mapid):
 
     # Calculate reward
     cylindres2=[]
+    cylindres3=[]
     for cylindre in cylindres:
-        cylindres2.append(cylindre) 
-    reward, _ = simulatePath(path(cylindres), cylindres2)
+        cylindres2.append(cylindre)
+        cylindres3.append(cylindre) 
+
+    reward, p = simulatePath((path(cylindres)), cylindres2)
+    reward,_ = simulatePath(optimizePath(p), cylindres3)
     return reward
 
 def train(generations=100, mutation=1, mutation_factor=1, maps=10):
