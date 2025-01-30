@@ -10,7 +10,7 @@ cylindres3=[]
 for cylindre in cylindres:
     cylindres2.append(cylindre) 
     cylindres3.append(cylindre) 
-_,p = simulatePath(path(cylindres), cylindres3)
+_,p = simulatePath(optimizePath(path(cylindres)), cylindres3)
 pathToFile(p)
 drawPath(p, cylindres2)
 print("finished")

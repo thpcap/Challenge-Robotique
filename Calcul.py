@@ -188,3 +188,20 @@ def pathToFile(path):
     Output_Str+="FINISH"
     Output_File.write(Output_Str)
     Output_File.close()
+
+def optimizePath(path):
+    flag = True
+    k = 0
+    while flag and k < 100:
+        k += 1
+        flag = False
+        for i in range(1, len(path)):
+            if flag:
+                break
+            for j in range(i+1, len(path)):
+                if i!=j and intersect(path[i-1], path[i], path[j-1], path[j]):
+                    flag = True
+                    path.insert(i, path.pop(j-1))
+                    break
+    
+    return path
