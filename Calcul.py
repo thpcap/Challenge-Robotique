@@ -31,9 +31,9 @@ def h(robot, cylindre):
 
     return robot.Distance(cylindre)*weights["distance"]+weights["variation"]*robot.fuel + cylindre.Valeur * weights["reward"] + cylindre.Masse*weights["mass"]
 
-def path(robot, cylindres):
+def path(cylindres):
+    robot = Robot()
     path = []
-    time = 0
     while (len(cylindres)):
         #calcule le meilleur cylindre à  atteindre
         best = cylindres[0]
@@ -63,8 +63,9 @@ def path(robot, cylindres):
         path.append(best)       
     return path
 
-def simulatePath(path):
-    path = []
+def simulatePath(path, cylindres):
+    robot = Robot()
+    new_path = []
     time = 0
     for point in path:
         #calcule la nouvelle position du robot et le deplassement
@@ -78,10 +79,11 @@ def simulatePath(path):
                     robot.mass += cyl.Masse
                     cylindres.remove(cyl)         
                         
+        cylindres.remove(point)
         robot.orientation += angl
         robot.fuel -= robot.consumption() * dist
         time += dist/robot.vitesse()
-        if (robot.fuel < 0 and time>=600):
+        if (robot.fuel < 0 or time>=600):
             break
 
         robot.mass += point.Masse
@@ -89,10 +91,11 @@ def simulatePath(path):
         robot.x += (math.cos(math.pi/2 - robot.orientation) * dist)
         robot.y += (math.sin(math.pi/2 - robot.orientation) * dist)
 
-        path.append(point)    
-    return (robot.reward, path)
+        new_path.append(point)    
+    return (robot.reward, new_path)
 
 def drawPath(path, cylindres):
+    print(len(path))
     robot = Robot()
     # Initialize variables for graph
     reward_list = [0]

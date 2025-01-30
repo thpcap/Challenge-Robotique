@@ -9,12 +9,14 @@ import numpy as np
 def calculate_reward(mapid):
     # Generate new map and robot
     #cylindres = generateMap(20)
-    input_link =int(mapid)
+    input_link = int(mapid)
     cylindres=Input_Map('test_Maps\donnees-map-'+str(input_link)+'.txt')
-    robot = Robot()
 
     # Calculate reward
-    reward, _ = path(robot, cylindres)
+    cylindres2=[]
+    for cylindre in cylindres:
+        cylindres2.append(cylindre) 
+    reward, _ = simulatePath(path(cylindres), cylindres2)
     return reward
 
 def train(generations=100, mutation=1, mutation_factor=1, maps=100):
