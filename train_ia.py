@@ -76,4 +76,4 @@ def train(generations=100, mutation=1, mutation_factor=1, maps=10):
     return weights_list, reward_list
 
 if __name__ == "__main__":
-    train(10000,mutation=5)
+    train(10000,mutation=10)
