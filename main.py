@@ -12,7 +12,7 @@ def main():
         cylindres2.append(cylindre) 
         cylindres3.append(cylindre) 
     _,p = simulatePath((path(cylindres)), cylindres3)
-    #p=optimizePath(p)
+    p=optimizePath(p)
     pathToFile(p)
     drawPath(p, cylindres2)
     print("finished")
