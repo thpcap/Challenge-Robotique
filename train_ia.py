@@ -21,13 +21,18 @@ def train(generations=100, mutation=1, mutation_factor=1, maps=100):
     # Generate initial map and robot
     #generate(20)
     #cylindres = generateMap(20)
-    cylindres= Input_Map('map.csv')
-    robot = Robot()
-
     # Initialize weights and rewards
     weights = list(getWeights().values())
     weights_list = [weights]
-    first_reward, _ = path(robot, cylindres)
+    new_reward_list = []
+    with concurrent.futures.ThreadPoolExecutor(10) as executor:
+            futures = [executor.submit(calculate_reward,i+1) for i in range(maps)]
+            for future in concurrent.futures.as_completed(futures):
+                reward = future.result()
+                new_reward_list.append(reward)
+
+    # Select the average weights
+    first_reward=np.mean(new_reward_list)
     print(first_reward)
     reward_list = [first_reward]
 
@@ -51,7 +56,7 @@ def train(generations=100, mutation=1, mutation_factor=1, maps=100):
         mutation_factor *= (generations-1)/generations
 
         # Print progress
-        print(f"Generation {generation + 1}/{generations}, Avg Reward: {avg_reward}, Mutation Factor {mutation_factor}, {generation/generations * 100}%")
+        print(f"Generation {generation + 1}/{generations}, Avg Reward: {round(avg_reward,3)}, Mutation Factor {round(mutation_factor,5)}, {round(generation/generations * 100,4)}%")
 
     # Save the best weights
     setWeights(weights)
@@ -65,4 +70,4 @@ def train(generations=100, mutation=1, mutation_factor=1, maps=100):
     return weights_list, reward_list
 
 if __name__ == "__main__":
-    train(1000,mutation=10,maps=10)
+    train(1000,mutation=1,maps=10)
