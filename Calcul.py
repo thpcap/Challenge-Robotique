@@ -121,7 +121,7 @@ def drawPath(path, cylindres):
         robot.mass += point.Masse + total_mass
         robot.x += (math.cos(math.pi/2 - robot.orientation) * dist)
         robot.y += (math.sin(math.pi/2 - robot.orientation) * dist)
-
+        cylindres.remove(point)
         time += dist/robot.vitesse()
         fuel_list.append(robot.fuel)
         times.append(time)

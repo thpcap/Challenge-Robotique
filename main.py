@@ -5,9 +5,11 @@ from Robot import *
 
 generate(20)
 cylindres=Input_Map(input_link)
+cylindres2=[]
+for cylindre in cylindres:
+    cylindres2.append(cylindre)
 robot=Robot()   
 _,p = path(robot,cylindres)
 pathToFile(p)
-cylindres=Input_Map(input_link)
-drawPath(p, cylindres)
+drawPath(p, cylindres2)
 print("finished")
