@@ -5,6 +5,8 @@ from GenerateMap import *
 import datetime
 from input import *
 import numpy as np
+import time
+
 
 def calculate_reward(mapid):
     # Generate new map and robot
@@ -31,6 +33,7 @@ def train(generations=100, mutation=1, mutation_factor=1, maps=10):
     weights = list(getWeights().values())
     weights_list = [weights]
     new_reward_list = []
+    start_time = time.time()
     with concurrent.futures.ThreadPoolExecutor(10) as executor:
             futures = [executor.submit(calculate_reward,i+1) for i in range(maps)]
             for future in concurrent.futures.as_completed(futures):
@@ -61,8 +64,13 @@ def train(generations=100, mutation=1, mutation_factor=1, maps=10):
         # Reduce mutation factor over time
         mutation_factor *= (generations-1)/generations
 
+        # Calculate elapsed time and estimated remaining time
+        elapsed_time = time.time() - start_time
+        remaining_time = (elapsed_time / (generation + 1)) * (generations - (generation + 1))
+
+
         # Print progress
-        print(f"Generation {generation + 1}/{generations}, Avg Reward: {round(avg_reward,3)}, Mutation Factor {round(mutation_factor,5)}, {round(generation/generations * 100,4)}%, best reward: {max(reward_list)}")
+        print(f"Generation {generation + 1}/{generations}, Avg Reward: {round(avg_reward, 3)}, Mutation Factor {round(mutation_factor, 5)}, {round(generation / generations * 100, 4)}%, best reward: {max(reward_list)}, Estimated time remaining: {round(remaining_time / 60, 2)} minutes")
 
     # Save the best weights
     setWeights(weights)
