@@ -10,7 +10,7 @@ import matplotlib.patches as pat
 
 
 weights={
-    "distance":-31.73641784169041,"reward":14.7179371699533,"mass":30.331067567610134,"collision":-2.3138877444930697,"variation":6.159866326376777
+    "distance":-138.41238502004168,"reward":88.71907116470743,"mass":113.53303954594608,"collision":-156.07825813319448,"variation":79.46728860935181
 }
 
 def getWeights():
@@ -78,8 +78,8 @@ def simulatePath(path, cylindres):
                     robot.reward += cyl.Valeur
                     robot.mass += cyl.Masse
                     cylindres.remove(cyl)         
-                        
-        cylindres.remove(point)
+        if point in cylindres:
+            cylindres.remove(point)
         robot.orientation += angl
         robot.fuel -= robot.consumption() * dist
         time += dist/robot.vitesse()
@@ -145,7 +145,8 @@ def drawPath(path, cylindres):
         robot.mass += point.Masse + total_mass
         robot.x += (math.cos(math.pi/2 - robot.orientation) * dist)
         robot.y += (math.sin(math.pi/2 - robot.orientation) * dist)
-        cylindres.remove(point)
+        if point in cylindres:
+            cylindres.remove(point)
         time += dist/robot.vitesse()
         fuel_list.append(robot.fuel)
         times.append(time)
@@ -190,4 +191,23 @@ def pathToFile(path):
     Output_File.close()
 
 def optimizePath(path):
-    return path
+    def path_crosses_itself(path):
+        for i in range(len(path) - 1):
+            for j in range(i + 2, len(path) - 1):
+                if intersect(path[i], path[i + 1], path[j], path[j + 1]):
+                    return True
+        return False
+
+    optimized_path = path[:]
+    while path_crosses_itself(optimized_path):
+        for i in range(len(optimized_path) - 1):
+            for j in range(i + 2, len(optimized_path) - 1):
+                if intersect(optimized_path[i], optimized_path[i + 1], optimized_path[j], optimized_path[j + 1]):
+                    # Swap the segments to avoid intersection
+                    optimized_path[i + 1], optimized_path[j] = optimized_path[j], optimized_path[i + 1]
+                    break
+            else:
+                continue
+            break
+
+    return optimized_path

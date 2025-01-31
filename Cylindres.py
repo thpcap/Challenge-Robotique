@@ -1,10 +1,11 @@
 class Cylindres:
-    def __init__(self,Id,x,y,Type,Rayon=1.35):
+    def __init__(self,Id,x,y,Type,Rayon=1.2):
         self.Id=Id
         self.Rayon=Rayon
         self.x=x
         self.y=y
         self.Type=Type
+        self.used=True
         if(self.Type==1):
             self.Masse=1
             self.Valeur=1
