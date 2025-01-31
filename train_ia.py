@@ -70,7 +70,7 @@ def train(generations=100, mutation=1, mutation_factor=1, maps=10):
 
 
         # Print progress
-        print(f"Generation {generation + 1}/{generations}, Avg Reward: {round(avg_reward, 3)}, Mutation Factor {round(mutation_factor, 5)}, {round(generation / generations * 100, 4)}%, best reward: {max(reward_list)}, Estimated time remaining: {round(remaining_time / 60, 2)} minutes")
+        print(f"Generation {generation + 1}/{generations}, Avg Reward: {round(avg_reward, 3)}, Mutation Factor {round(mutation_factor, 5)}, {round(generation / generations * 100, 4)}%, best reward: {max(reward_list)}, Estimated time remaining: {int(remaining_time / 60)} minutes")
 
     # Save the best weights
     setWeights(weights)
