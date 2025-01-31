@@ -10,7 +10,7 @@ import matplotlib.patches as pat
 
 
 weights={
-    "distance":-42.259817313103966,"reward":43.3931626028545,"mass":18.986810964415287,"collision":-15.152960337620517,"variation":5.382363906923022
+    "distance":-138.41238502004168,"reward":88.71907116470743,"mass":113.53303954594608,"collision":-156.07825813319448,"variation":79.46728860935181
 }
 
 def getWeights():
