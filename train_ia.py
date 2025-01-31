@@ -85,3 +85,4 @@ def train(generations=100, mutation=1, mutation_factor=1, maps=10):
 
 if __name__ == "__main__":
     train(100_000,mutation=50)
+
